@@ -1,21 +1,35 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata = {
   title: "TripTuk | Rent Tuk-tuk",
   description: "Rent a tuk tuk with driver",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/icon1.png",
+    apple: "/apple-icon.png",
+    other: [
+      {
+        rel: "icon",
+        url: "/icon0.svg",
+        type: "image/svg+xml",
+      },
+      {
+        rel: "icon",
+        url: "/web-app-manifest-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        rel: "icon",
+        url: "/web-app-manifest-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }) {
