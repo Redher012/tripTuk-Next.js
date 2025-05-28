@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
 }
 
 const Page = async ({ params }) => {
-  const res = await fetch(`http://localhost:3000/api/trips`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`, {
     cache: "no-store",
   });
 
@@ -21,8 +21,6 @@ const Page = async ({ params }) => {
   const trips = await res.json();
   const trip = await trips.filter((t) => t.id === tripId)[0];
   const restTrips = await trips.filter((t) => t.id !== tripId);
-
-  console.log(restTrips);
 
   return (
     <div className="min-h-screen py-16 bg-primary-50 px-3">

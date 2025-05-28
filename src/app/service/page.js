@@ -2,7 +2,7 @@ import Image from "next/image";
 import Overlay from "../components/tripList/Overlay";
 
 export default async function Page() {
-  const res = await fetch("http://localhost:2000/api/trips", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`, {
     cache: "no-store",
   });
   const trips = await res.json();
