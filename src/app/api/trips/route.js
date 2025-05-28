@@ -25,7 +25,7 @@ export async function GET() {
         "An unforgettable 4-day escape with a tuk-tuk and local driver — perfect for travelers short on time but big on adventure.",
       longDescription:
         "Make the most of your time in Sri Lanka with this compact, experience-packed 4-day tuk-tuk journey. Starting in Colombo, you'll explore handpicked highlights — from coastal towns and cultural treasures to scenic countryside routes. Your friendly local driver takes care of the road while you soak in the views, taste authentic food, and discover hidden gems. Ideal for solo travelers, couples, or small groups looking for a stress-free, immersive getaway with all the support you need.",
-      image: "/4DayTripProduct.png ",
+      image: "/4DayTripProduct.png",
       currency: "€",
       routes: [
         {
