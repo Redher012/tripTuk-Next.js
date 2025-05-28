@@ -2,6 +2,8 @@ import Image from "next/image";
 import Overlay from "../components/tripList/Overlay";
 
 export default async function Page() {
+  console.log("Base Url", process.env.NEXT_PUBLIC_BASE_URL);
+  console.log("Fetch Url", `${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`);
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`, {
     cache: "no-store",
   });
