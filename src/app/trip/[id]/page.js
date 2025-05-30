@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import React from "react";
 
 export async function generateMetadata({ params }) {
+  const resolvedParams = await params;
   return {
-    title: `Trip ${params.id}`,
+    title: `Trip ${resolvedParams.id}`,
   };
 }
 
