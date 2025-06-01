@@ -61,7 +61,7 @@ const Order = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto pt-16 p-6 bg-white rounded-lg shadow-lg grid md:grid-cols-2 gap-10 relative">
+    <div className="max-w-7xl mx-auto pt-16 p-6 bg-red-950 rounded-lg shadow-lg grid md:grid-cols-2 gap-10 relative">
       {/* Left Side - Form Fields */}
       <form className="space-y-4">
         <h2 className="text-4xl font-semibold mb-4">Product Order Form</h2>
