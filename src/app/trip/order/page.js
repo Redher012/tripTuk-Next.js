@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
+import { FaCreditCard } from "react-icons/fa";
+import { FaCcPaypal } from "react-icons/fa";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -15,7 +17,7 @@ theDayAfter.setHours(0, 0, 0, 0);
 
 const Order = () => {
   const [names, setNames] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("bank");
+  const [paymentMethod, setPaymentMethod] = useState("card");
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -35,7 +37,7 @@ const Order = () => {
   const passengersCount = Number(numberPassenger.split(" ")[0]);
   const tukTuksNeeded = Math.ceil(passengersCount / 2) || 1;
   const priceVehicleDay = Number(process.env.NEXT_PUBLIC_TUK_TUK_PRICE_DAY);
-  const priceToatalTrip = tukTuksNeeded * priceVehicleDay * daysTrip;
+  const priceTotalTrip = tukTuksNeeded * priceVehicleDay * daysTrip;
 
   useEffect(() => {
     if (startDate) {
@@ -48,20 +50,59 @@ const Order = () => {
 
   useEffect(() => {
     const getCountries = async () => {
-      const res = await fetch("https://restcountries.com/v3.1/all");
+      const res = await fetch(
+        "https://restcountries.com/v3.1/all?fields=name,cca2"
+      );
       const countries = await res.json();
 
       const sorted = countries.sort((a, b) =>
         a.name.common.localeCompare(b.name.common)
       );
       setCountries(countries);
-      // console.log(sorted);
     };
     getCountries();
   }, []);
 
+  const handleCreateOrder = async function () {
+    const res = await fetch("/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        names,
+        paymentMethod,
+        selectedCountry,
+        address,
+        town,
+        postCode,
+        phone,
+        email,
+        startDate,
+        endDate,
+        pickupPoint,
+        pickupAddress,
+        departureTime,
+        tripDuration,
+        numberPassenger,
+        daysTrip,
+        passengersCount,
+        tukTuksNeeded,
+        priceVehicleDay,
+        priceTotalTrip,
+      }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (res.ok) {
+      alert("Order created successfully");
+    } else {
+      alert("Order creation failed");
+    }
+  };
+
   return (
-    <div className="max-w-7xl mx-auto pt-16 p-6 bg-red-950 rounded-lg shadow-lg grid md:grid-cols-2 gap-10 relative">
+    <div className="max-w-7xl mx-auto pt-16 p-6 bg-neutral-50 rounded-lg shadow-lg grid md:grid-cols-2 gap-10 relative">
       {/* Left Side - Form Fields */}
       <form className="space-y-4">
         <h2 className="text-4xl font-semibold mb-4">Product Order Form</h2>
@@ -307,23 +348,50 @@ const Order = () => {
                 <strong>{daysTrip || 1}</strong>{" "}
                 {daysTrip === 1 ? "day" : "days"}
               </span>
-              <span>${priceToatalTrip.toFixed(2)}</span>
+              <span>${priceTotalTrip.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span>Extras - {"none"}</span>
-              <span>${priceToatalTrip.toFixed(2)}</span>
+              <span>${priceTotalTrip.toFixed(2)}</span>
             </div>
           </div>
           <div className="w-full h-[1px] bg-primary-900 my-3" />
           <div className="flex justify-between font-semibold">
             <span>Total Price</span>
-            <span>${priceToatalTrip.toFixed(2)}</span>
+            <span>${priceTotalTrip.toFixed(2)}</span>
           </div>
         </div>
 
         <div className="mt-4 space-y-1">
           <p className="font-semibold text-gray-700">Payment Method:</p>
-          <p className="text-green-700 capitalize">{paymentMethod}</p>
+          <div className="grid grid-cols-2 gap-2 text-4xl">
+            <div
+              className={`flex items-center justify-center gap-2 py-2 border-2 border-primary-500 rounded cursor-pointer hover:bg-primary-600 ${
+                paymentMethod === "card" && "bg-primary-500 text-gray-50"
+              }`}
+              onClick={() => setPaymentMethod("card")}
+            >
+              <FaCreditCard />
+              <p className="text-lg">Card</p>
+            </div>
+            <div
+              className={`flex items-center justify-center gap-2 py-2 border-2 border-primary-500 rounded cursor-pointer hover:bg-primary-600 ${
+                paymentMethod === "payPal" && "bg-primary-500 text-gray-50"
+              }`}
+              onClick={() => setPaymentMethod("payPal")}
+            >
+              <FaCcPaypal />
+              <p className="text-lg">PayPal</p>
+            </div>
+          </div>
+        </div>
+        <div className="pt-6 ">
+          <button
+            onClick={handleCreateOrder}
+            className="w-full bg-purple-300 py-3 text-xl cursor-pointer rounded font-semibold text-neutral-050 hover:bg-purple-700"
+          >
+            Order My Ride
+          </button>
         </div>
       </div>
     </div>

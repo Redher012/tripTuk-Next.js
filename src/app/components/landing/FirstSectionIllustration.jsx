@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import MainButton from "../MainButton";
+import Link from "next/link";
 
 const FirstSectionIllustration = () => {
   const abTestText = [
@@ -56,7 +57,13 @@ const FirstSectionIllustration = () => {
               Lanka.
             </h2>
             <div className="">
-              <MainButton>Start Exploring</MainButton>
+              {/* <MainButton>Start Exploring</MainButton> */}
+              <Link
+                href="/service"
+                className="bg-purple-500 hover:bg-purple-900 text-neutral-050 py-2 px-4 rounded-full text-2xl cursor-pointer w-full border"
+              >
+                Start Exploring
+              </Link>
             </div>
           </div>
         </div>
