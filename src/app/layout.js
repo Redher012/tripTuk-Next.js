@@ -1,7 +1,7 @@
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
-import PayPalProviderWrapper from "./components/paypalProviderWrapper";
+import PayPalProviderWrapper from "./components/PaypalProviderWrapper";
 
 export const metadata = {
   title: "TripTuk | Rent Tuk-tuk",
