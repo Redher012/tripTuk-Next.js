@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import MainButton from "../MainButton";
+import Link from "next/link";
 
 const SecondSectionAbout = () => {
   const abTesting = [
@@ -41,9 +42,13 @@ const SecondSectionAbout = () => {
           from jungle paths to coastal towns. No guesswork. Just pure freedom,
           local stories, and unforgettable trip.
         </p>
-        <div className="w-64">
-          <MainButton>Start My Adventure</MainButton>
-        </div>
+
+        <Link
+          href="/service"
+          className="bg-purple-400 hover:bg-purple-900 text-neutral-050 py-2 px-4 rounded-full text-2xl cursor-pointer w-full text-center"
+        >
+          Start My Adventure
+        </Link>
       </div>
     </section>
   );

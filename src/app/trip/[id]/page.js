@@ -1,5 +1,6 @@
 import Overlay from "@/app/components/tripList/Overlay";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -44,9 +45,12 @@ const Page = async ({ params }) => {
             <p className="text-6xl">{trip.currency + trip.price}</p>
             <p className="mb-1 text-xl"> /{trip.pricePer}</p>
           </div>
-          <button className="bg-purple-500 py-2 w-48 text-neutral-050 rounded-full text-lg hover:bg-purple-800 cursor-pointer z-20 font-semibold">
+          <Link
+            href={`/trip/order/${trip.id}`}
+            className="bg-purple-400 hover:bg-purple-900 text-neutral-050 py-2 px-4 rounded-full text-2xl cursor-pointer w-full text-center"
+          >
             Book Trip
-          </button>
+          </Link>
           <p className="text-lg">
             <strong>Trip details:</strong>
             <br />
@@ -70,7 +74,7 @@ const Page = async ({ params }) => {
             {trip.routes.map((route, i) => (
               <div
                 key={route.label}
-                className="bg-neutral-050 py-3 px-5 rounded-4xl cursor-pointer"
+                className="bg-neutral-050 py-3 px-5 rounded-4xl"
                 style={{ boxShadow: "0px 0px 20px -4px #a3d9a5" }}
                 // onClick={() => setSelectedExpander(i)}
               >
@@ -131,7 +135,7 @@ const Page = async ({ params }) => {
           <div className="bg-neutral-050 py-3 px-5 rounded-4xl flex flex-col">
             <h4 className="py-1 font-semibold text-2xl ">Flexible Trip</h4>
             <div className="h-[2px] w-full bg-primary-900 mb-3 rounded" />
-            <div className="grid grid-cols-2 gap-6 text-lg text-ellipsis">
+            <div className="md:grid grid-cols-2 gap-6 text-lg text-ellipsis flex flex-col">
               <p>
                 With a Flexi Trip, you’re in full control of your journey.
                 Choose your pickup point during the next step—Colombo (city or

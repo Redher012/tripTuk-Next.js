@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import MainButton from "../MainButton";
+import Link from "next/link";
 
 const FifthContactSection = () => {
   return (
@@ -20,9 +21,13 @@ const FifthContactSection = () => {
             offer more than transport — we offer local insight, warm
             hospitality, and a true taste of Sri Lanka.
           </p>
-          <div className="w-52">
-            <MainButton>Contact</MainButton>
-          </div>
+
+          <Link
+            href="/contact"
+            className="bg-purple-400 hover:bg-purple-900 text-neutral-050 py-2 px-4 rounded-full text-2xl cursor-pointer w-full text-center"
+          >
+            Get in touch
+          </Link>
         </div>
 
         <div className="w-full md:w-1/2 flex flex-col gap-4">

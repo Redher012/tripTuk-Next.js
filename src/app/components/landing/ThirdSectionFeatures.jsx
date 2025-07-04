@@ -7,6 +7,7 @@ import { SlLocationPin } from "react-icons/sl";
 import { AiOutlineRollback } from "react-icons/ai";
 import Image from "next/image";
 import MainButton from "../MainButton";
+import Link from "next/link";
 
 const ThirdSectionFeatures = () => {
   const serviceFeatures = [
@@ -78,7 +79,12 @@ const ThirdSectionFeatures = () => {
               </div>
             ))}
           </div>
-          <MainButton>Let&apos;s go on a trip</MainButton>
+          <Link
+            href="/trip/order"
+            className="bg-purple-400 hover:bg-purple-900 text-neutral-050 py-2 px-4 rounded-full text-2xl cursor-pointer w-full text-center"
+          >
+            Book My Trip
+          </Link>
         </div>
         <div className="relative md:w-1/2 lg:h-[600px] md:h-[720px] h-[600px] overflow-hidden">
           <Image

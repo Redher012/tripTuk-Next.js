@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Overlay from "../components/tripList/Overlay";
+import Link from "next/link";
 
 export default async function Page() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`, {
@@ -36,9 +37,12 @@ export default async function Page() {
                 <p className="text-6xl">{trip.currency + " " + trip.price}</p>
                 <p className="mb-1 text-xl"> /{trip.pricePer}</p>
               </div>
-              <button className="bg-purple-500 py-2 w-48 text-neutral-050 rounded-full text-lg hover:bg-purple-800 cursor-pointer z-20 font-semibold">
+              <Link
+                href={`/trip/order/${trip.id}`}
+                className="bg-purple-500 py-2 w-48 text-neutral-050 rounded-full text-lg hover:bg-purple-800 cursor-pointer z-20 font-semibold text-center"
+              >
                 Book Trip
-              </button>
+              </Link>
             </div>
           </div>
         ))}

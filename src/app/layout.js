@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import PayPalProviderWrapper from "./components/paypalProviderWrapper";
 
 export const metadata = {
   title: "TripTuk | Rent Tuk-tuk",
@@ -39,9 +40,11 @@ export default function RootLayout({ children }) {
         <meta name="grammarly" content="false" />
       </head>
       <body>
-        <Navigation />
-        {children}
-        <Footer />
+        <PayPalProviderWrapper>
+          <Navigation />
+          {children}
+          <Footer />
+        </PayPalProviderWrapper>
       </body>
     </html>
   );
