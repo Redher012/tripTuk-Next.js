@@ -26,8 +26,8 @@ const FirstSectionIllustration = () => {
     },
   ];
   return (
-    <section className="realative min-h-screen flex md:items-center md:pt-0 pt-36">
-      <div className="absolute inset-0">
+    <section className="realative md:min-h-screen h-[900px] flex md:items-center md:pt-0 pt-32">
+      <div className="inset-0">
         <Image
           src="/Depositphotos_379922742_XL.jpg"
           className="md:block hidden"
@@ -37,7 +37,7 @@ const FirstSectionIllustration = () => {
           priority
         />
         <Image
-          src="/MobileFirsSection.jpg"
+          src="/MobileLongFirst.jpg"
           className="md:hidden"
           alt="welcomePiture"
           fill
@@ -46,13 +46,15 @@ const FirstSectionIllustration = () => {
         />
       </div>
 
+      <div className="absolute md:bg-gradient-to-r top-0 left-o w-full h-full from-white/80 to-transparent to-60% " />
+
       <div className="relative w-full px-3 md:pt-10">
         <div className=" max-w-7xl mx-auto">
           <div className="flex flex-col gap-4 lg: md:w-5/12">
             <h1 className="md:text-7xl text-6xl font-bold text-primary-900">
               Explore Beyond the Guidebook
             </h1>
-            <h2 className="text-2xl ">
+            <h2 className="text-2xl">
               Ride with a local, go off the map, and discover the real Sri
               Lanka.
             </h2>

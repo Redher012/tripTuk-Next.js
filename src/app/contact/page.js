@@ -2,14 +2,29 @@
 import React, { useState } from "react";
 import { FaFacebookSquare } from "react-icons/fa";
 import { FaSquareInstagram } from "react-icons/fa6";
-import { FaLinkedin, FaBehanceSquare } from "react-icons/fa";
+import { sendEmailClient } from "@/lib/sendEmailClient";
 
 const Page = () => {
-  console.log("Something wrong");
+  const [reason, setReason] = useState("Order");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    console.log("connected");
+    const result = await sendEmailClient({
+      name,
+      email,
+      message,
+      reason,
+      subject: "Message from contact form",
+    });
+
+    if (result.success) {
+      alert("Message Sent");
+    } else {
+      alert("Failed to send a message");
+    }
   };
 
   return (
@@ -34,13 +49,7 @@ const Page = () => {
               📍 <span>Police Station Rd, Ella, Sri Lanka</span>
             </li>
           </ul>
-          <div className="flex gap-5 text-primary-200 text-2xl pt-4">
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <FaLinkedin />
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <FaBehanceSquare />
-            </a>
+          <div className="flex gap-5 text-primary-200 text-3xl pt-4">
             <a
               href="https://www.facebook.com/yourpage"
               target="_blank"
@@ -66,20 +75,22 @@ const Page = () => {
             </p>
             <div className="flex flex-wrap gap-2">
               {[
-                "Renting Tuk Tuk",
-                "Knowing The Company",
-                "Preplaned Trip",
-                "Other",
+                { name: "Renting Tuk Tuk", value: "Order" },
+                { name: "Knowing The Company", value: "Information" },
+                { name: "Preplaned Trip", value: "Prepland Info" },
+                { name: "Cancel/Change Trip", value: "Change Trip" },
+                { name: "Other", value: "Other" },
               ].map((label, i) => (
                 <button
                   key={i}
-                  className={`px-4 py-2 rounded-full text-sm font-medium border ${
-                    i === 0
+                  onClick={() => setReason(label.value)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium border cursor-pointer ${
+                    label.value === reason
                       ? "bg-primary-600 text-white"
                       : "text-gray-600 border-gray-300 hover:bg-teal-100"
                   }`}
                 >
-                  {label}
+                  {label.name}
                 </button>
               ))}
             </div>
@@ -92,6 +103,8 @@ const Page = () => {
               <input
                 type="text"
                 placeholder="Jon Smith"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full border-b-2 border-teal-600 outline-none py-1"
               />
             </div>
@@ -100,6 +113,8 @@ const Page = () => {
               <input
                 type="email"
                 placeholder="email@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full border-b border-gray-300 outline-none py-1"
               />
             </div>
@@ -110,6 +125,8 @@ const Page = () => {
               <textarea
                 rows={4}
                 className="w-full border border-gray-300 rounded-lg p-2 outline-none"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type your message here..."
               />
             </div>
