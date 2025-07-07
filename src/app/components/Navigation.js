@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
@@ -11,8 +11,26 @@ const Navigation = () => {
 
   const router = useRouter();
 
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        burgerNavOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setBurgerNavOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [burgerNavOpen]);
+
   return (
-    <nav className="w-full absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-between p-2 max-w-7xl bg-transparent z-30">
+    <nav className="w-full absolute top-0 left-0 right-0 flex items-center justify-between p-2 max-w-7xl bg-transparent z-30">
       <div className="cursor-pointer" onClick={() => router.push("/")}>
         <h2 className="text-primary-900 font-bold text-3xl">Triptuk</h2>
       </div>
@@ -27,8 +45,9 @@ const Navigation = () => {
 
       {/* Nav menu */}
       <div
+        ref={menuRef}
         className={clsx(
-          "absolute top-0 right-0 h-screen w-3/5 sm:w-3/5 md:relative md:h-auto md:w-auto transition-all duration-300 ease-in-out",
+          "fixed top-0 right-0 h-screen w-3/5 sm:w-3/5 md:relative md:h-auto md:w-auto transition-all duration-300 ease-in-out",
           "md:translate-x-0 md:bg-transparent md:flex md:items-center",
           burgerNavOpen
             ? "translate-x-0 bg-white/80 backdrop-blur-md shadow-2xl border-l border-primary-100"

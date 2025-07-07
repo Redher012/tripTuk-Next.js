@@ -35,16 +35,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden max-w-screen">
       <head>
         <meta name="grammarly" content="false" />
       </head>
-      <body>
-        <PayPalProviderWrapper>
-          <Navigation />
-          {children}
-          <Footer />
-        </PayPalProviderWrapper>
+      <body className="overflow-x-hidden min-h-screen">
+        <div className="overflow-hidden min-h-screen">
+          <PayPalProviderWrapper>
+            <Navigation />
+            {children}
+            <Footer />
+          </PayPalProviderWrapper>
+        </div>
       </body>
     </html>
   );

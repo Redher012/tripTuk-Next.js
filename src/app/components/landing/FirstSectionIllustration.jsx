@@ -26,8 +26,8 @@ const FirstSectionIllustration = () => {
     },
   ];
   return (
-    <section className="realative md:min-h-screen h-[900px] flex md:items-center md:pt-0 pt-32">
-      <div className="inset-0">
+    <section className="realative h-[920px] flex md:items-center md:pt-0 pt-32">
+      <div className="absolute inset-0 md:h-full h-[920px]">
         <Image
           src="/Depositphotos_379922742_XL.jpg"
           className="md:block hidden"
@@ -38,10 +38,9 @@ const FirstSectionIllustration = () => {
         />
         <Image
           src="/MobileLongFirst.jpg"
-          className="md:hidden"
-          alt="welcomePiture"
+          className="md:hidden object-cover"
+          alt="welcome Piture Mobile"
           fill
-          style={{ objectFit: "cover" }}
           priority
         />
       </div>
