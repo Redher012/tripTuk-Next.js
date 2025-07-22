@@ -13,6 +13,7 @@ const Page = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const result = await sendEmailClient({
+      triptuk: true,
       name,
       email,
       message,

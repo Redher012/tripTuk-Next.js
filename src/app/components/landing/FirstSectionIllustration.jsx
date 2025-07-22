@@ -45,7 +45,7 @@ const FirstSectionIllustration = () => {
         />
       </div>
 
-      <div className="absolute md:bg-gradient-to-r top-0 left-o w-full h-full from-white/80 to-transparent to-60% " />
+      <div className="absolute md:bg-white/30 top-0 left-o w-full h-full" />
 
       <div className="relative w-full px-3 md:pt-10">
         <div className=" max-w-7xl mx-auto">

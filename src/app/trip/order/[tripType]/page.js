@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
 import { FaCreditCard } from "react-icons/fa";
 import { FaCcPaypal } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -73,6 +74,19 @@ const Order = () => {
   }, []);
 
   const handleCreateOrder = async function () {
+    if (
+      !names ||
+      !address ||
+      !selectedCountry ||
+      !town ||
+      !postCode ||
+      !phone ||
+      !email
+    ) {
+      toast.error("All the fields with ⭐️ are requred");
+      return;
+    }
+
     const res = await fetch("/api/order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -105,9 +119,8 @@ const Order = () => {
     if (data.order._id) {
       orderId.current = data.order._id;
     }
-    console.log("OrderId:", orderId.current);
     if (!res.ok) {
-      alert("Order creation failed");
+      toast.error("Order creation failed");
       return;
     }
 
@@ -128,17 +141,17 @@ const Order = () => {
         if (resStripe.ok && dataOrder.sessionUrl) {
           window.location.href = dataOrder.sessionUrl;
         } else {
-          alert("Stripe session failed.");
+          toast.error("Stripe session failed.");
           console.error(dataOrder);
         }
       } catch (err) {
         console.error("Error starting Stripe Checkout", err);
-        alert("Something went wrong!");
+        toast.error("Error starting Stripe Checkout");
       }
     } else if (paymentMethod === "payPal") {
       setPayPalOpen(true);
     } else {
-      alert("Invalid payment method");
+      toast.error("Invalid payment method");
     }
   };
 
@@ -471,6 +484,7 @@ const Order = () => {
               onApprove={async (data, actions) => {
                 try {
                   const details = await actions.order.capture();
+                  toast.success("Payment successful");
                   console.log(
                     "Transaction completed by",
                     details.payer.name.given_name
@@ -490,12 +504,13 @@ const Order = () => {
 
                   const result = await resSetPaid.json();
                   console.log("window.location.origin", window.location.origin);
+                  window.location.href = `${window.location.origin}/success`;
                 } catch (error) {
                   console.error(
                     "Error during PayPal payment processing",
                     error
                   );
-                  alert("Something went wrong after payment.");
+                  toast.error("Something went wrong after payment.");
                 }
               }}
               onError={(err) => {

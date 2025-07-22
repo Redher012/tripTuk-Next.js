@@ -30,7 +30,7 @@ const Navigation = () => {
   }, [burgerNavOpen]);
 
   return (
-    <nav className="w-full absolute top-0 left-0 right-0 flex items-center justify-between p-2 max-w-7xl bg-transparent z-30">
+    <nav className="w-full absolute top-0 left-0 right-0 flex items-center justify-between p-2 max-w-7xl mx-auto bg-transparent z-30">
       <div className="cursor-pointer" onClick={() => router.push("/")}>
         <h2 className="text-primary-900 font-bold text-3xl">Triptuk</h2>
       </div>

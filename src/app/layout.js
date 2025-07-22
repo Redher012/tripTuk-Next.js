@@ -2,6 +2,7 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import PayPalProviderWrapper from "./components/PaypalProviderWrapper";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "TripTuk | Rent Tuk-tuk",
@@ -46,6 +47,7 @@ export default function RootLayout({ children }) {
             {children}
             <Footer />
           </PayPalProviderWrapper>
+          <ToastContainer />
         </div>
       </body>
     </html>

@@ -4,26 +4,35 @@ import { useState } from "react";
 import { sendEmailClient } from "@/lib/sendEmailClient"; // same helper you already created
 
 export default function EmailOnlyForm() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("kristianhalachev0@gmail.com");
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
 
-    const result = await sendEmailClient({
-      name: "Email Signup",
-      email,
-      message: "This user submitted their email address.",
-      reason: "Newsletter / Contact capture",
-    });
-
-    if (result.success) {
-      setStatus("success");
-      setEmail("");
-    } else {
-      setStatus("error");
+    try {
+      const result = await fetch("/api/send-login-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      // if (result.success) {
+      //   alert("Email Sent Successfully");
+      // } else {
+      //   alert("Error sending an email");
+      // }
+      console.log("Result data:", result, result.result, result.loginLink);
+    } catch (error) {
+      console.error("Failed to send a message", error);
     }
+
+    // if (result.success) {
+    //   setStatus("success");
+    //   setEmail("");
+    // } else {
+    //   setStatus("error");
+    // }
   };
 
   return (
