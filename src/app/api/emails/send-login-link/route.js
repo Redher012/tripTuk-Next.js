@@ -15,8 +15,6 @@ export async function POST(req) {
       : process.env.NEXT_PUBLIC_URL_PROD
   }my-orders/auth?token=${token}`;
 
-  console.log(loginLink);
-
   const result = await sendEmailClient({
     email: email,
     subject: "Login to Triptuk",

@@ -12,7 +12,7 @@ export default function EmailOnlyForm() {
     setStatus("loading");
 
     try {
-      const result = await fetch("/api/send-login-link", {
+      const result = await fetch("/api/emails/send-login-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -22,7 +22,6 @@ export default function EmailOnlyForm() {
       // } else {
       //   alert("Error sending an email");
       // }
-      console.log("Result data:", result, result.result, result.loginLink);
     } catch (error) {
       console.error("Failed to send a message", error);
     }

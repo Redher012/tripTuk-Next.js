@@ -32,6 +32,10 @@ const OrderSchema = new mongoose.Schema(
     priceVehicleDay: { type: Number }, // from .env
     priceTotalTrip: { type: Number }, // derived
     paid: { type: Boolean, default: false },
+
+    stripePaymentIntentId: { type: String },
+    stripeChargeId: { type: String },
+    stripeSessionId: { type: String },
   },
   {
     timestamps: true,

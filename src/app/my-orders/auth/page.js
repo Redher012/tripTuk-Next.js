@@ -8,14 +8,14 @@ import PaidLabel from "@/app/components/Orders/PaidLabel";
 const EMAIL_SECRET = process.env.EMAIL_SECRET;
 
 export default async function AuthPage({ searchParams }) {
-  const token = searchParams.token;
+  const params = await searchParams;
+  const token = params.token;
   let orders;
   let isLoading = true;
   let isError = false;
 
   try {
     const { email } = jwt.verify(token, EMAIL_SECRET);
-
     await connectDB();
 
     orders = await Order.find({ email }).lean();

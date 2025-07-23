@@ -36,9 +36,33 @@ export async function POST(req) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const orderId = session.metadata?.orderId;
+    const paymentIntentId = session.payment_intent;
+    const sessionId = session.id;
+
+    let chargeId = null;
+
+    try {
+      const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      chargeId = intent.charges?.data?.[0]?.id || null;
+    } catch (err) {
+      console.error("❌ Failed to fetch payment intent:", err.message);
+    }
+
     if (orderId) {
+      console.log(
+        "stripePaymentIntentId:",
+        paymentIntentId,
+        "stripeChargeId:",
+        chargeId,
+        "stripeSessionId:",
+        sessionId
+      );
       try {
-        await markOrderAsPaid(orderId);
+        await markOrderAsPaid(orderId, {
+          stripePaymentIntentId: paymentIntentId,
+          stripeChargeId: chargeId,
+          stripeSessionId: sessionId,
+        });
         console.log("✅ Order marked as paid via Stripe webhook:", orderId);
       } catch (err) {
         console.error("❌ Failed to mark order as paid", err);

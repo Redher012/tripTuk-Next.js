@@ -114,14 +114,27 @@ const Order = () => {
       }),
     });
 
-    const data = await res.json();
-    console.log(data.order._id);
-    if (data.order._id) {
-      orderId.current = data.order._id;
+    const dataCreation = await res.json();
+    console.log(dataCreation.order._id);
+    if (dataCreation.order._id) {
+      orderId.current = dataCreation.order._id;
     }
     if (!res.ok) {
       toast.error("Order creation failed");
       return;
+    }
+
+    // Send email for created order;
+    const orderData = dataCreation.order;
+    try {
+      const res = await fetch("/api/emails/send-order-confirmation", {
+        method: "POST",
+        body: JSON.stringify(orderData),
+      });
+      const dataEmail = await res.json();
+      console.log("Data form client", dataEmail);
+    } catch (err) {
+      console.error("Error sending a message");
     }
 
     if (paymentMethod === "card") {

@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   const body = await req.json();
   const { triptuk, name, message, email, reason, subject, html } = body;
-  console.log(body);
 
   const mailgun = new Mailgun(FormData);
   const mg = mailgun.client({
@@ -32,7 +31,8 @@ export async function POST(req) {
 
     const data = await mg.messages.create("mg.triptuk.com", mailOptions);
 
-    console.log(data);
+    console.log(`Email about ${reason} to ${email} was sent.`);
+
     return NextResponse.json({ success: true, id: data.id });
   } catch (error) {
     console.log(error);
