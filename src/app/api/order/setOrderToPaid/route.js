@@ -1,11 +1,16 @@
 import connectDB from "@/lib/mongoose";
 import { markOrderAsPaid } from "@/lib/orders";
-import Order from "@/models/Order";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const id = body.orderId;
+    // const id = body.orderId;
+    const {
+      orderId: id,
+      paypalOrderId,
+      paypalCaptureId,
+      paypalPaymentStatus,
+    } = body;
     let origin = req.headers.get("origin");
 
     if (!origin) {
@@ -17,9 +22,11 @@ export async function POST(req) {
       }
     }
 
-    await markOrderAsPaid(id);
-
-    console.log("origin", origin);
+    await markOrderAsPaid(id, {
+      paypalOrderId,
+      paypalCaptureId,
+      paypalPaymentStatus,
+    });
 
     return Response.json({ success: true, origin: origin }, { status: 201 });
   } catch (err) {

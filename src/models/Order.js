@@ -5,8 +5,8 @@ const OrderSchema = new mongoose.Schema(
     names: { type: String, required: true },
     paymentMethod: {
       type: String,
-      enum: ["payPal", "card"],
-      default: "bank",
+      enum: ["paypal", "card"],
+      default: "card",
     },
 
     selectedCountry: { type: String, required: true },
@@ -34,8 +34,12 @@ const OrderSchema = new mongoose.Schema(
     paid: { type: Boolean, default: false },
 
     stripePaymentIntentId: { type: String },
-    stripeChargeId: { type: String },
+    // stripeChargeId: { type: String },
     stripeSessionId: { type: String },
+
+    paypalOrderId: { type: String },
+    paypalCaptureId: { type: String },
+    paypalPaymentStatus: { type: String },
   },
   {
     timestamps: true,

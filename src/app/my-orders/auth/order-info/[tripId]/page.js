@@ -1,3 +1,4 @@
+import ModalCancelOrder from "@/app/components/Orders/ModalCancelOrder";
 import PaidLabel from "@/app/components/Orders/PaidLabel";
 import PaymentSelector from "@/app/components/Orders/PaymentSelector";
 import Link from "next/link";
@@ -44,36 +45,39 @@ export default async function Page({ params }) {
       <div className="min-h-screen bg-green-50 pt-24 px-4">
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md flex flex-col md:flex-row overflow-hidden">
           {/* Left Section */}
-          <div className="bg-green-900 text-white w-full md:w-1/2 p-8">
-            <h1 className="text-3xl font-semibold leading-snug mb-6">
-              Order <span className="text-green-300">Details</span>
-            </h1>
+          <div className="bg-green-900 text-white w-full md:w-1/2 p-8 flex flex-col justify-between">
+            <div>
+              <h1 className="text-3xl font-semibold leading-snug mb-6">
+                Order <span className="text-green-300">Details</span>
+              </h1>
 
-            <ul className="space-y-3 text-green-100 text-sm">
-              <li>
-                <strong>Name:</strong> {order.names}
-              </li>
-              <li>
-                <strong>Email:</strong> {order.email}
-              </li>
-              <li>
-                <strong>Phone:</strong> {order.phone}
-              </li>
-              <li>
-                <strong>Address:</strong> {order.address}, {order.town},{" "}
-                {order.postCode}
-              </li>
-              <li>
-                <strong>Country:</strong> {order.selectedCountry}
-              </li>
-              <li>
-                <strong>Pickup:</strong> {order.pickupAddress}
-              </li>
-              <li className="flex items-center gap-3">
-                <strong>Payment method: {order.paymentMethod}</strong>
-                <PaidLabel isPaid={order.paid} />
-              </li>
-            </ul>
+              <ul className="space-y-3 text-green-100 text-sm">
+                <li>
+                  <strong>Name:</strong> {order.names}
+                </li>
+                <li>
+                  <strong>Email:</strong> {order.email}
+                </li>
+                <li>
+                  <strong>Phone:</strong> {order.phone}
+                </li>
+                <li>
+                  <strong>Address:</strong> {order.address}, {order.town},{" "}
+                  {order.postCode}
+                </li>
+                <li>
+                  <strong>Country:</strong> {order.selectedCountry}
+                </li>
+                <li>
+                  <strong>Pickup:</strong> {order.pickupAddress}
+                </li>
+                <li className="flex items-center gap-3">
+                  <strong>Payment method: {order.paymentMethod}</strong>
+                  <PaidLabel isPaid={order.paid} />
+                </li>
+              </ul>
+            </div>
+
             {!order.paid && (
               <div className="bg-neutral-050 p-3 mt-3 rounded-lg">
                 <PaymentSelector
@@ -81,6 +85,14 @@ export default async function Page({ params }) {
                   email={order.email}
                   orderId={order._id}
                 />
+              </div>
+            )}
+            {order.paid && (
+              <div className="flex gap-3 text-lg mt-10">
+                <ModalCancelOrder orderId={tripId} />
+                {/* <button className="w-1/2 bg-purple-400 py-1 px-2 rounded-lg cursor-pointer  hover:bg-purple-700">
+                  Change Start Date
+                </button> */}
               </div>
             )}
           </div>

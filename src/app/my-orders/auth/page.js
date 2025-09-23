@@ -4,6 +4,7 @@ import Order from "@/models/Order";
 import connectDB from "@/lib/mongoose";
 import Link from "next/link";
 import PaidLabel from "@/app/components/Orders/PaidLabel";
+import SetCookieClient from "@/lib/SetCookieClient";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET;
 
@@ -20,12 +21,6 @@ export default async function AuthPage({ searchParams }) {
 
     orders = await Order.find({ email }).lean();
 
-    // (await cookies()).set("auth_email", email, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   path: "/",
-    //   maxAge: 3600,
-    // });
     isLoading = false;
   } catch (err) {
     console.error("Failed to verify token", err);
@@ -77,6 +72,7 @@ export default async function AuthPage({ searchParams }) {
         }That's Your Reservations:`}</h1>
 
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <SetCookieClient token={token} />
           {orders.map((order) => {
             const now = new Date();
             const isPast = new Date(order.endDate) < now;

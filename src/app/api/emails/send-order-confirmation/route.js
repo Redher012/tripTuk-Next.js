@@ -9,7 +9,17 @@ export async function POST(req) {
     reason: "Order successfully created",
     html: orderConfirmationEmailTemplate(resData),
   });
-  // console.log("Data Result", result);
+
+  await sendEmailClient({
+    email: "office@triptuk.com",
+    reason: "A new Order was created",
+    html: orderConfirmationEmailTemplate(resData),
+  });
+  await sendEmailClient({
+    email: "Chamiduprasath@gmail.com",
+    reason: "A new Order was created",
+    html: orderConfirmationEmailTemplate(resData),
+  });
 
   return Response.json("Success sending a message");
 }

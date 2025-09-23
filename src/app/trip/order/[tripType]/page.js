@@ -1,10 +1,10 @@
 "use client";
-import { PayPalButtons } from "@paypal/react-paypal-js";
+import CountrySelector from "@/app/components/Orders/CountrySelector";
+import PaymentSelector from "@/app/components/Orders/PaymentSelector";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
-import { FaCreditCard } from "react-icons/fa";
-import { FaCcPaypal } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const today = new Date();
@@ -26,6 +26,7 @@ const Order = () => {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCountryCode, setSelectedCountryCode] = useState("");
   const [address, setAddress] = useState("");
   const [town, setTown] = useState("");
   const [postCode, setPostCode] = useState("");
@@ -39,7 +40,7 @@ const Order = () => {
   const [tripDuration, setTripDuration] = useState(
     tripType !== "flexi" ? tripType : "1"
   );
-  const [payPalOpen, setPayPalOpen] = useState(false);
+
   const [numberPassenger, setNumberPassengers] = useState("1 passenger");
   // const [orderId, setOrderId] = useState("");
   const orderId = useRef(null);
@@ -61,19 +62,25 @@ const Order = () => {
   useEffect(() => {
     const getCountries = async () => {
       const res = await fetch(
-        "https://restcountries.com/v3.1/all?fields=name,cca2"
+        "https://restcountries.com/v3.1/all?fields=name,cca2,idd,flags"
       );
       const countries = await res.json();
 
-      const sorted = countries.sort((a, b) =>
+      const sortedCountries = countries.sort((a, b) =>
         a.name.common.localeCompare(b.name.common)
       );
-      setCountries(countries);
+      setCountries(sortedCountries);
     };
     getCountries();
   }, []);
 
-  const handleCreateOrder = async function () {
+  useEffect(() => {
+    if (selectedCountry) {
+      setSelectedCountryCode(selectedCountry);
+    }
+  }, [selectedCountry]);
+
+  const createOrderAndGetId = async function () {
     if (
       !names ||
       !address ||
@@ -83,7 +90,7 @@ const Order = () => {
       !phone ||
       !email
     ) {
-      toast.error("All the fields with ⭐️ are requred");
+      toast.error("All required fields must be filled.");
       return;
     }
 
@@ -115,11 +122,8 @@ const Order = () => {
     });
 
     const dataCreation = await res.json();
-    console.log(dataCreation.order._id);
-    if (dataCreation.order._id) {
-      orderId.current = dataCreation.order._id;
-    }
-    if (!res.ok) {
+
+    if (!res.ok || !dataCreation.order?._id) {
       toast.error("Order creation failed");
       return;
     }
@@ -137,35 +141,10 @@ const Order = () => {
       console.error("Error sending a message");
     }
 
-    if (paymentMethod === "card") {
-      try {
-        const resStripe = await fetch("/api/create-checkout-session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            priceTotalTrip,
-            email,
-            orderId: orderId.current,
-          }),
-        });
-
-        const dataOrder = await resStripe.json();
-
-        if (resStripe.ok && dataOrder.sessionUrl) {
-          window.location.href = dataOrder.sessionUrl;
-        } else {
-          toast.error("Stripe session failed.");
-          console.error(dataOrder);
-        }
-      } catch (err) {
-        console.error("Error starting Stripe Checkout", err);
-        toast.error("Error starting Stripe Checkout");
-      }
-    } else if (paymentMethod === "payPal") {
-      setPayPalOpen(true);
-    } else {
-      toast.error("Invalid payment method");
-    }
+    return {
+      orderId: dataCreation.order._id,
+      email,
+    };
   };
 
   return (
@@ -186,20 +165,12 @@ const Order = () => {
             />
           </div>
 
-          <div>
-            <label className="block font-medium">Country *</label>
-            <select
-              className="w-full p-2.5 border rounded cursor-pointer"
-              required
-              value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
-            >
-              <option value="">Select a country...</option>
-              {countries.map((country, i) => (
-                <option key={country.cca2}>{country.name.common}</option>
-              ))}
-            </select>
-          </div>
+          <CountrySelector
+            countries={countries}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+            field="Country"
+          />
 
           <div>
             <label className="block font-medium">Street Address *</label>
@@ -232,18 +203,14 @@ const Order = () => {
             />
           </div>
 
-          <div>
-            <label className="block font-medium">
-              Phone with country code *
-            </label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
+          <CountrySelector
+            countries={countries}
+            selectedCountry={selectedCountryCode}
+            setSelectedCountry={setSelectedCountryCode}
+            phone={phone}
+            setPhone={setPhone}
+            field="Phone"
+          />
 
           <div>
             <label className="block font-medium">Email Address *</label>
@@ -380,7 +347,8 @@ const Order = () => {
         <div className="bg-gray-100 p-6 rounded-lg shadow-inner md:fixed top-16 left-1/2 xl:ml-8 transform  w-full xl:max-w-xl lg:max-w-lg md:max-w-[370px]">
           <h3 className="text-xl font-semibold mb-4">Trip Summary</h3>
 
-          <div className="space-y-2 border-b pb-4  text-gray-800">
+          {/* border-b pb-4  */}
+          <div className="space-y-2 text-gray-800">
             <div className="flex justify-between">
               <span>Name</span>
               <span>{names || "—"}</span>
@@ -439,101 +407,12 @@ const Order = () => {
               <span>${priceTotalTrip.toFixed(2)}</span>
             </div>
           </div>
-
-          <div className="mt-4 space-y-1">
-            <p className="font-semibold text-gray-700">Payment Method:</p>
-            <div className="grid grid-cols-2 gap-2 text-4xl">
-              <div
-                className={`flex items-center justify-center gap-2 py-2 border-2 border-primary-500 rounded cursor-pointer hover:bg-primary-600 ${
-                  paymentMethod === "card" && "bg-primary-500 text-gray-50"
-                }`}
-                onClick={() => setPaymentMethod("card")}
-              >
-                <FaCreditCard />
-                <p className="text-lg">Card</p>
-              </div>
-              <div
-                className={`flex items-center justify-center gap-2 py-2 border-2 border-primary-500 rounded cursor-pointer hover:bg-primary-600 ${
-                  paymentMethod === "payPal" && "bg-primary-500 text-gray-50"
-                }`}
-                onClick={() => setPaymentMethod("payPal")}
-              >
-                <FaCcPaypal />
-                <p className="text-lg">PayPal</p>
-              </div>
-            </div>
-          </div>
-          <div className="pt-6 ">
-            <button
-              onClick={handleCreateOrder}
-              className="w-full bg-purple-300 py-3 text-xl cursor-pointer rounded font-semibold text-neutral-050 hover:bg-purple-700"
-            >
-              Order My Ride
-            </button>
-          </div>
+          <PaymentSelector
+            tripPrice={priceTotalTrip}
+            getOrderDetails={createOrderAndGetId}
+          />
         </div>
       </div>
-
-      {payPalOpen && (
-        <div className="fixed bg-neutral-400/70 w-screen h-full left-0 top-0 flex items-center justify-center px-3">
-          <div
-            id="paypal-button-container"
-            className="bg-neutral-050 w-xl p-6 rounded-4xl"
-          >
-            <h2 className="text-3xl font-bold mb-4 py-2">Pay with PayPal</h2>
-            <PayPalButtons
-              style={{ layout: "vertical" }}
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        value: priceTotalTrip.toFixed(2),
-                      },
-                    },
-                  ],
-                });
-              }}
-              onApprove={async (data, actions) => {
-                try {
-                  const details = await actions.order.capture();
-                  toast.success("Payment successful");
-                  console.log(
-                    "Transaction completed by",
-                    details.payer.name.given_name
-                  );
-
-                  const resSetPaid = await fetch("/api/setOrderToPaid", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ orderId: orderId.current }),
-                  });
-
-                  if (!resSetPaid.ok) {
-                    console.error("Failed to update order payment status");
-                  }
-
-                  const result = await resSetPaid.json();
-                  console.log("window.location.origin", window.location.origin);
-                  window.location.href = `${window.location.origin}/success`;
-                } catch (error) {
-                  console.error(
-                    "Error during PayPal payment processing",
-                    error
-                  );
-                  toast.error("Something went wrong after payment.");
-                }
-              }}
-              onError={(err) => {
-                console.error("PayPal Checkout Error:", err);
-                window.location.href = `${window.location.origin}/cancel`;
-              }}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

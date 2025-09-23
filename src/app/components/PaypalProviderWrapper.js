@@ -5,7 +5,7 @@ export default function PayPalProviderWrapper({ children }) {
   return (
     <PayPalScriptProvider
       options={{
-        clientId: process.env.NEXT_PUBLIC_PAY_PAL_CLIENTID,
+        clientId: process.env.NEXT_PUBLIC_PAY_PAL_CLIENTID_SANDBOX,
       }}
     >
       {children}

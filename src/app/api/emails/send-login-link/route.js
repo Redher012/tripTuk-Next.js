@@ -7,7 +7,7 @@ const EMAIL_SECRET = process.env.EMAIL_SECRET;
 export async function POST(req) {
   const { email } = await req.json();
 
-  const token = jwt.sign({ email }, EMAIL_SECRET, { expiresIn: "1d" });
+  const token = jwt.sign({ email }, EMAIL_SECRET, { expiresIn: "15d" });
 
   const loginLink = `${
     process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
