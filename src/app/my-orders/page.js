@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import Loading from "../loading";
 
 export default function EmailOnlyForm() {
-  const [email, setEmail] = useState("kristianhalachev0@gmail.com");
+  const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();

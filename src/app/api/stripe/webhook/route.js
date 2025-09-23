@@ -2,7 +2,11 @@ import { markOrderAsPaid } from "@/lib/orders";
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
-const stripe = new Stripe(process.env.TEST_STRIPE_SECRET_KEY);
+const stripeKey =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+    ? process.env.TEST_STRIPE_SECRET_KEY
+    : process.env.LIVE_STRIPE_SECRET_KEY;
+const stripe = new Stripe(stripeKey);
 
 export const config = {
   api: {
