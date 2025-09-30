@@ -11,8 +11,13 @@ export async function generateMetadata({ params }) {
   };
 }
 
+const url =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+    ? process.env.NEXT_PUBLIC_URL_DEV
+    : process.env.NEXT_PUBLIC_URL_PROD;
+
 const Page = async ({ params }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`, {
+  const res = await fetch(`${url}/api/trips`, {
     cache: "no-store",
   });
 
