@@ -41,7 +41,7 @@ const Page = () => {
           </h2>
           <ul className="space-y-4">
             <li className="flex items-center gap-3">
-              📧 <span>contact@triptuk.com</span>
+              📧 <span>office@triptuk.com</span>
             </li>
             <li className="flex items-center gap-3">
               📞 <span>+94 76 540 7295</span>
@@ -103,7 +103,7 @@ const Page = () => {
               <p className="text-sm font-semibold text-gray-600">Your name</p>
               <input
                 type="text"
-                placeholder="Jon Smith"
+                placeholder="John Smith"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full border-b-2 border-teal-600 outline-none py-1"

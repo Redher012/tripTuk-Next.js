@@ -3,9 +3,15 @@ import Overlay from "../components/tripList/Overlay";
 import Link from "next/link";
 
 export default async function Page() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/trips`, {
+  const url =
+    process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+      ? process.env.NEXT_PUBLIC_URL_DEV
+      : process.env.NEXT_PUBLIC_URL_PROD;
+
+  const res = await fetch(`${url}api/trips`, {
     cache: "no-store",
   });
+  console.log("res", res);
   const trips = await res.json();
 
   return (
