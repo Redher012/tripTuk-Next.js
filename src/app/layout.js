@@ -41,11 +41,11 @@ export default function RootLayout({ children }) {
         <meta name="grammarly" content="false" />
       </head>
       <body className="overflow-x-hidden min-h-screen">
-        <script
+        {/* <script
           defer
           src="https://analytics.staydetails.com/script.js"
           data-website-id="05f7c674-af83-4568-a6a5-2a26b4a50cb2"
-        ></script>
+        ></script> */}
         <div className="overflow-hidden min-h-screen">
           <PayPalProviderWrapper>
             <Navigation />
