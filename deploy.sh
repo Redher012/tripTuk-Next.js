@@ -15,6 +15,6 @@ echo "Building frontend..."
 npm run build
 
 echo "Restarting server..."
-pm2 restart dAudio.dev
+pm2 restart triptuk
 
 echo "Deplyment complete"
