@@ -149,17 +149,27 @@ const Order = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto pt-16 p-6 bg-neutral-50 rounded-lg shadow-lg grid md:grid-cols-2 gap-10 relative">
-        {/* Left Side - Form Fields */}
-        <form className="space-y-4">
-          <h2 className="text-4xl font-semibold mb-4">Product Order Form</h2>
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40 py-20 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-10 pt-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Book Your Adventure</h1>
+            <p className="text-xl text-gray-600">
+              {tripType === "flexi" ? "Flexible Trip With Tuk Tuk and Driver" : `${tripType} Day Trip With Tuk Tuk and Driver`}
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            <form className="space-y-6 lg:col-span-2 bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-amber-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">Your Information</h2>
 
           <div>
-            <label className="block font-medium">Two Names *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Two Names *</label>
             <input
+              name="name"
+              autoComplete="name"
               value={names}
               onChange={(e) => setNames(e.target.value)}
-              className="w-full p-2 border rounded"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
               placeholder="Your Names"
               required
             />
@@ -173,9 +183,11 @@ const Order = () => {
           />
 
           <div>
-            <label className="block font-medium">Street Address *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Street Address *</label>
             <input
-              className="w-full p-2 border rounded mb-2"
+              name="street-address"
+              autoComplete="street-address"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all mb-2"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               placeholder="House number and street name, apartment, etc..."
@@ -184,9 +196,11 @@ const Order = () => {
           </div>
 
           <div>
-            <label className="block font-medium">Town / City *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Town / City *</label>
             <input
-              className="w-full p-2 border rounded"
+              name="address-level2"
+              autoComplete="address-level2"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
               value={town}
               onChange={(e) => setTown(e.target.value)}
               required
@@ -194,9 +208,11 @@ const Order = () => {
           </div>
 
           <div>
-            <label className="block font-medium">Postcode / ZIP *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Postcode / ZIP *</label>
             <input
-              className="w-full p-2 border rounded"
+              name="postal-code"
+              autoComplete="postal-code"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
               value={postCode}
               onChange={(e) => setPostCode(e.target.value)}
               required
@@ -213,40 +229,45 @@ const Order = () => {
           />
 
           <div>
-            <label className="block font-medium">Email Address *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
             <input
               type="email"
+              name="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
               required
             />
           </div>
 
+              <div className="h-px bg-gradient-to-r from-amber-200 via-amber-400 to-orange-200 my-8" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Trip Details</h2>
+
           <div className="mb-4">
-            <label className="block font-medium mb-1">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
               Journey Start Date *
             </label>
             <Calendar
               onChange={setStartDate}
               value={startDate}
-              className="rounded border"
+                  className="rounded-xl border-2 border-gray-200 p-3"
               tileDisabled={({ date }) => {
                 const d = new Date(date);
                 d.setHours(0, 0, 0, 0);
                 return d <= tomorrow; // disables today, tomorrow, and any past date
               }}
             />
-            <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-600">
               Your trip starts on: {startDate.toDateString()}
             </p>
           </div>
 
           {tripType === "flexi" && (
             <div>
-              <label className="block font-medium">Trip duration</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Trip duration</label>
               <select
-                className="w-full p-3 border rounded"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
                 value={tripDuration}
                 onChange={(e) => setTripDuration(e.target.value)}
               >
@@ -268,9 +289,9 @@ const Order = () => {
           )}
 
           <div>
-            <label className="block font-medium">Number of Passengers</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Number of Passengers</label>
             <select
-              className="w-full p-3 border rounded"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
               value={numberPassenger}
               onChange={(e) => setNumberPassengers(e.target.value)}
             >
@@ -290,9 +311,9 @@ const Order = () => {
           </div>
 
           <div>
-            <label className="block font-medium">Pickup Area *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Area *</label>
             <select
-              className="w-full p-3 border rounded"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
               value={pickupPoint}
               onChange={(e) => setPickupPoint(e.target.value)}
             >
@@ -318,21 +339,28 @@ const Order = () => {
 
           {pickupPoint !== "Colombo Airport" && (
             <div>
-              <label className="block font-medium">Pickup Address in</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Address in</label>
               <input
                 type="text"
+                name="pickup-address"
+                autoComplete="address-line1"
                 placeholder="Add pickup point"
                 value={pickupAddress}
                 onChange={(e) => setPickupAddress(e.target.value)}
-                className="w-full p-2 border rounded"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
                 required
               />
             </div>
           )}
 
           <div>
-            <label className="block font-medium">Pickup Time *</label>
-            <select className="w-full p-3 border rounded">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Time *</label>
+                <select
+                  name="pickup-time"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none transition-all"
+                  value={departureTime}
+                  onChange={(e) => setDepartureTime(e.target.value)}
+                >
               {Array.from({ length: (22 - 4) * 2 + 1 }).map((_, i) => {
                 const hour = 4 + Math.floor(i / 2);
                 const minutes = i % 2 === 0 ? "00" : "30";
@@ -341,11 +369,11 @@ const Order = () => {
               })}
             </select>
           </div>
-        </form>
+            </form>
 
-        {/* Right Side - Order Summary */}
-        <div className="bg-gray-100 p-6 rounded-lg shadow-inner md:fixed top-16 left-1/2 xl:ml-8 transform  w-full xl:max-w-xl lg:max-w-lg md:max-w-[370px]">
-          <h3 className="text-xl font-semibold mb-4">Trip Summary</h3>
+            <div className="lg:col-span-1">
+              <div className="sticky top-24 bg-white rounded-3xl shadow-xl p-8 border border-amber-100">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Trip Summary</h3>
 
           {/* border-b pb-4  */}
           <div className="space-y-2 text-gray-800">
@@ -407,10 +435,13 @@ const Order = () => {
               <span>${priceTotalTrip.toFixed(2)}</span>
             </div>
           </div>
-          <PaymentSelector
-            tripPrice={priceTotalTrip}
-            getOrderDetails={createOrderAndGetId}
-          />
+                <PaymentSelector
+                  tripPrice={priceTotalTrip}
+                  getOrderDetails={createOrderAndGetId}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

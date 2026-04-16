@@ -1,4 +1,3 @@
-import Overlay from "@/app/components/tripList/Overlay";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -30,176 +29,183 @@ const Page = async ({ params }) => {
   const restTrips = await trips.filter((t) => t.id !== tripId);
 
   return (
-    <div className="min-h-screen py-16 bg-primary-50 px-3">
-      <section className="max-w-7xl mx-auto flex md:flex-row flex-col gap-3">
-        <div className="relative md:w-1/2 h-[900px]">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40">
+      <section className="relative pt-24 pb-10 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto">
+          <Link
+            href="/service"
+            className="inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 font-semibold mb-6 group"
+          >
+            <span className="transition-transform group-hover:-translate-x-1">←</span>
+            Back to All Trips
+          </Link>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-4 md:px-6 pb-12">
+        <div className="grid lg:grid-cols-2 gap-10">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-stone-100 p-3 md:p-4">
           <Image
             src={`${trip.image}`}
             alt={trip.shortDescription}
-            fill
-            className="object-cover"
+            width={1000}
+            height={1200}
+            className="w-full h-auto max-h-[760px] object-contain mx-auto rounded-2xl"
           />
-        </div>
-        <div className="flex  flex-col lg:px-7 md:px-2 lg:py-6 justify-center md:w-7/12  lg:gap-5 md:gap-3 gap-4">
-          <p className="text-neutral-700 text-xl">{trip.triptype}</p>
-          <h3 className="text-5xl font-semibold text-primary-900">
-            {trip.name}
-          </h3>
-          <p className="text-2xl">{trip.shortDescription}</p>
-          <div className="flex items-end gap-1">
-            <p className="text-6xl">{trip.currency + trip.price}</p>
-            <p className="mb-1 text-xl"> /{trip.pricePer}</p>
+            <div className="absolute top-6 right-6 bg-amber-400 text-gray-900 px-6 py-3 rounded-full font-bold shadow-xl text-lg">
+              {trip.triptype === "flexible" ? "Flexible Plan" : "Preplanned Route"}
+            </div>
           </div>
-          <Link
-            href={`/trip/order/${trip.id}`}
-            className="bg-purple-400 hover:bg-purple-900 text-neutral-050 py-2 px-4 rounded-full text-2xl cursor-pointer w-full text-center"
-          >
-            Book Trip
-          </Link>
-          <p className="text-lg">
-            <strong>Trip details:</strong>
-            <br />
-            {trip.longDescription}
-          </p>
-          <p className="text-lg">
-            <strong>Additional:</strong>
-            <br />
-            Accommodation is not included in the trip price — the cost covers
-            only the tuk tuk drive. If you haven&apos;t planned your stays yet,
-            we’d be happy to help! We can recommend budget, mid-range, or luxury
-            accommodation options at any of the destinations on your route. We
-            can also assist with the booking to make your trip even smoother.
-          </p>
+
+          <div className="flex flex-col justify-between">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full mb-4 shadow-md border border-amber-100">
+                <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                <span className="text-sm font-semibold text-gray-900 uppercase tracking-wider">{trip.triptype}</span>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">{trip.name}</h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">{trip.shortDescription}</p>
+
+              <div className="flex items-end gap-3 mb-8">
+                <span className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-amber-700 to-orange-500 bg-clip-text text-transparent">
+                  {trip.currency}
+                  {trip.price}
+                </span>
+                <span className="text-2xl text-gray-500 mb-3">/{trip.pricePer}</span>
+              </div>
+
+              <Link
+                href={`/trip/order/${trip.id}`}
+                className="w-full group/btn bg-gradient-to-r from-amber-700 to-orange-500 hover:from-amber-800 hover:to-orange-600 text-white font-bold py-5 px-10 rounded-full text-xl shadow-xl transform transition-all duration-300 hover:scale-[1.01] flex items-center justify-center gap-3"
+              >
+                Book This Trip
+                <span className="transition-transform group-hover/btn:translate-x-1">→</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-      <section className="max-w-7xl mx-auto pt-4">
-        <h3 className="text-3xl py-3">Trip routes:</h3>
+
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-12">
+        <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-3xl font-bold text-gray-900">Trip Details</h2>
+          </div>
+          <p className="text-lg text-gray-700 leading-relaxed mb-8">{trip.longDescription}</p>
+
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
+            <h3 className="font-bold text-xl text-gray-900 mb-4">Important Information</h3>
+            <p className="text-gray-700 leading-relaxed">
+              Accommodation is not included in the trip price - the cost covers only the tuk tuk and driver. If you have not planned your stays yet, we can recommend and help book options based on your budget and route.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto pt-4 px-4 md:px-6">
         {trip.routes ? (
-          <div className="flex flex-col gap-3">
+          <div className="space-y-6">
+            <h3 className="text-4xl font-bold text-gray-900 mb-8">Trip Routes</h3>
             {trip.routes.map((route, i) => (
               <div
                 key={route.label}
-                className="bg-neutral-050 py-3 px-5 rounded-4xl"
-                style={{ boxShadow: "0px 0px 20px -4px #a3d9a5" }}
-                // onClick={() => setSelectedExpander(i)}
+                className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-amber-100"
               >
-                <div className="flex text-2xl items-center justify-between">
-                  <h4 className="py-1 font-semibold">{route.label}</h4>
-                  {/* <div className="text-4xl">
-                    {i === selectedExpander ? (
-                      <IoIosArrowBack />
-                    ) : (
-                      <IoIosArrowDown />
-                    )}
-                  </div> */}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+                  <h4 className="text-2xl md:text-3xl font-bold text-gray-900">{route.label}</h4>
+                  <span className="bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-4 py-2 rounded-full font-semibold">
+                    {route.season}
+                  </span>
                 </div>
-                {/* <AnimatePresence initial> */}
-                {/* {i === selectedExpander && ( */}
-                <div
-                // key="constnt"
-                // initial={{ height: 0, opacity: 0 }}
-                // animate={{ height: "auto", opacity: 1 }}
-                // exit={{ height: 0, opacity: 0 }}
-                // transition={{ duration: 0.3, ease: "easeInOut" }}
-                // className="overflow-hidden cursor-default"
-                >
-                  <div className="h-[2px] w-full bg-primary-900 mb-3 rounded" />
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {route.days.map((day) => (
-                      <div
-                        key={day.title}
-                        className=" rounded-2xl p-2 flex flex-col gap-1 z-40"
-                        style={{ boxShadow: "0px 0px 5px 0px #cfcfcf" }}
-                      >
-                        <div className="flex gap-2 text-lg font-semibold">
-                          <h5>Day {day.day} -</h5>
-                          <p>{day.title}</p>
+
+                <div className="h-1 w-full bg-gradient-to-r from-amber-700 to-orange-500 rounded-full mb-8" />
+                <div className="grid md:grid-cols-2 gap-6">
+                  {route.days.map((day) => (
+                    <div
+                      key={day.title}
+                      className="bg-gradient-to-br from-stone-50 to-amber-50 rounded-2xl p-6 shadow-md border border-amber-100 hover:shadow-lg transition-shadow"
+                    >
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="bg-gradient-to-r from-amber-700 to-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg shrink-0">
+                          {day.day}
                         </div>
-                        <div className="flex gap-2 text-lg">
-                          <label>Distance - </label>
-                          <p>{day.distance}</p> -<p>{day.travelTime}</p>
-                        </div>
-                        <div>
-                          <p>Highlights:</p>
-                          {day.highlights.map((highLight) => (
-                            <p key={highLight} className="">
-                              - {highLight}
-                            </p>
-                          ))}
-                        </div>
+                        <h4 className="font-bold text-lg text-gray-900 leading-tight">{day.title}</h4>
                       </div>
-                    ))}
-                  </div>
+
+                      {(day.distance || day.travelTime) && (
+                        <div className="flex gap-4 text-sm text-gray-600 mb-4">
+                          {day.distance && <span>{day.distance}</span>}
+                          {day.travelTime && <span>{day.travelTime}</span>}
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <p className="font-semibold text-gray-900">Highlights:</p>
+                        {day.highlights.map((highLight) => (
+                          <p key={highLight} className="text-gray-700 text-sm">
+                            - {highLight}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                {/* )} */}
-                {/* </AnimatePresence> */}
               </div>
             ))}
           </div>
         ) : (
-          <div className="bg-neutral-050 py-3 px-5 rounded-4xl flex flex-col">
-            <h4 className="py-1 font-semibold text-2xl ">Flexible Trip</h4>
-            <div className="h-[2px] w-full bg-primary-900 mb-3 rounded" />
-            <div className="md:grid grid-cols-2 gap-6 text-lg text-ellipsis flex flex-col">
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl">
+            <h4 className="text-4xl font-bold text-gray-900 mb-8">Flexible Trip Details</h4>
+            <div className="h-1 w-full bg-gradient-to-r from-amber-700 to-orange-500 rounded-full mb-8" />
+            <div className="grid md:grid-cols-2 gap-8 text-lg text-gray-700">
               <p>
-                With a Flexi Trip, you’re in full control of your journey.
-                Choose your pickup point during the next step—Colombo (city or
-                airport) and Ella are free of charge, while other locations are
-                available for a small additional fee. Whether you want to fully
-                customize your route or tweak one of our preplanned journeys,
-                this option gives you the freedom to explore Sri Lanka your way.
+                With a Flexi Trip, you are in full control of your journey. Choose your pickup point during the next step. Colombo city, Colombo airport, and Ella are free of charge, while other locations are available for a small additional fee.
               </p>
               <p>
-                Travel up to 12 hours per day with no limit on distance. Your
-                local driver-guide will help you uncover hidden gems, steer
-                clear of tourist traps, and experience Sri Lanka like a local.
-                With years of experience behind the tuk-tuk handlebars, fluent
-                English, and a friendly attitude, your chauffeur ensures a safe,
-                smooth, and unforgettable journey.
+                Travel up to 12 hours per day with no strict distance limit. Your local driver-guide helps you discover hidden gems and avoid tourist traps for a smooth, safe, and unforgettable journey.
               </p>
             </div>
           </div>
         )}
       </section>
-      <section className="max-w-7xl mx-auto py-16">
-        <h5 className="text-3xl py-3">More Trip Options</h5>
-        <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-3">
-          {restTrips.map((t, i) => (
-            <div
+
+      <section className="max-w-7xl mx-auto py-16 px-4 md:px-6">
+        <h5 className="text-4xl font-bold text-gray-900 mb-8">More Trip Options</h5>
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {restTrips.slice(0, 3).map((t, i) => (
+            <Link
               key={i}
-              className="rounded-4xl overflow-hidden flex flex-col bg-white shadow-sm relative group cursor-pointer"
+              href={`/trip/${t.id}`}
+              className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-amber-100 hover:border-amber-300 h-full flex flex-col"
             >
-              <Overlay tripId={t.id} />
-              <div className="h-[500px] w-full relative">
+              <div className="relative h-64 overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100">
                 <Image
                   src={t.image}
                   alt={t.name}
                   fill
-                  className="object-cover"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
               </div>
-              <div className="flex flex-col justify-between bg-neutral-050 py-4 px-3 flex-1">
-                <div className="flex flex-col gap-2">
-                  <h4 className="text-primary-900 font-semibold text-lg">
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="font-bold text-lg text-gray-900 mb-3 group-hover:text-amber-700 transition-colors">
                     {t.name}
-                  </h4>
-                  <div className="flex items-end gap-1 text-lg">
-                    <p className="text-2xl">
+                  </h3>
+                  <div className="flex items-end gap-2 mb-4">
+                    <span className="text-2xl font-bold text-amber-700">
                       {t.currency}
                       {t.price}
-                    </p>
-                    <p>/{t.pricePer}</p>
+                    </span>
+                    <span className="text-sm text-gray-500">/{t.pricePer}</span>
                   </div>
-                  <div className="h-[2px] w-full bg-primary-900 rounded-4xl" />
-                  <p className="text-sm text-neutral-700">
-                    {t.shortDescription}
-                  </p>
+                  <p className="text-sm text-gray-600">{t.shortDescription}</p>
                 </div>
-                <button className="bg-purple-500 py-2 px-5 text-neutral-050 rounded-full hover:bg-purple-800 cursor-pointer z-20 mt-4">
-                  Book Trip
-                </button>
+                <span className="mt-4 w-full bg-gradient-to-r from-amber-700 to-orange-500 text-white font-bold py-3 px-4 rounded-full transition-all duration-300 text-sm text-center">
+                  View Details
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

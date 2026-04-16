@@ -5,7 +5,6 @@ export async function POST(req) {
   try {
     await connectDB();
     const body = await req.json();
-    // console.log(body);
     const order = await Order.create(body);
     return Response.json({ success: true, order }, { status: 201 });
   } catch (error) {

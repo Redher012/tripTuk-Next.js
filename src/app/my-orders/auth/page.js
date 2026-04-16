@@ -5,6 +5,7 @@ import connectDB from "@/lib/mongoose";
 import Link from "next/link";
 import PaidLabel from "@/app/components/Orders/PaidLabel";
 import SetCookieClient from "@/lib/SetCookieClient";
+import LogoutButton from "./LogoutButton";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET;
 
@@ -29,17 +30,18 @@ export default async function AuthPage({ searchParams }) {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-primary-50 pt-20 px-2">
-        <h1 className="text-2xl font-semibold">Your Reservations</h1>
-        <div className="flex h-full w-full pt-20 items-center justify-center">
-          <div className="max-w-xl bg-neutral-050 p-5 rounded-2xl shadow-lg shadow-primary-200/20">
-            <h2 className="py-4 text-lg">
-              Your Session has expired, please click the link bellow and log in
-              again.
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40 pt-20 px-4 md:px-6">
+        <div className="max-w-3xl mx-auto pt-8">
+          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-amber-700 via-amber-600 to-orange-500 bg-clip-text text-transparent">
+            Your Reservations
+          </h1>
+          <div className="bg-white rounded-3xl shadow-xl border border-amber-100 p-6 md:p-8">
+            <h2 className="text-lg text-gray-700 mb-6">
+              Your session has expired. Please log in again to view your reservations.
             </h2>
-            <div className="text-right py-4">
+            <div className="text-right">
               <Link
-                className="bg-primary-600 text-xl text-neutral-050 px-4 py-2 rounded-full hover:bg-primary-800 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-700 to-orange-500 hover:from-amber-800 hover:to-orange-600 text-white font-bold px-6 py-3 rounded-full shadow-lg transition cursor-pointer w-full sm:w-auto"
                 href="/my-orders"
               >
                 Log In
@@ -53,10 +55,14 @@ export default async function AuthPage({ searchParams }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-primary-50 pt-20 px-2">
-        <h1 className="text-2xl font-semibold">Your Reservations</h1>
-        <div className="flex h-full w-full pt-20 items-center justify-center">
-          <h2>Loading Orders...</h2>
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40 pt-20 px-4 md:px-6">
+        <div className="max-w-3xl mx-auto pt-8">
+          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-amber-700 via-amber-600 to-orange-500 bg-clip-text text-transparent">
+            Your Reservations
+          </h1>
+          <div className="bg-white rounded-3xl shadow-xl border border-amber-100 p-6 md:p-8">
+            <h2 className="text-gray-700">Loading Orders...</h2>
+          </div>
         </div>
       </div>
     );
@@ -65,13 +71,16 @@ export default async function AuthPage({ searchParams }) {
   const userName = ` ${orders[0]?.names || ""}`;
 
   return (
-    <div className="min-h-screen bg-primary-50 pt-20 px-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6 text-left">{`Hello${
-          orders ? userName : ", "
-        }That's Your Reservations:`}</h1>
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40 pt-20 px-4 md:px-6">
+      <div className="max-w-7xl mx-auto pt-8 md:pt-12">
+        <div className="flex flex-col gap-4 mb-8 md:flex-row md:items-center md:justify-between">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-700 via-amber-600 to-orange-500 bg-clip-text text-transparent">
+            {`Hello${orders ? userName : ", "} That's Your Reservations:`}
+          </h1>
+          <LogoutButton />
+        </div>
 
-        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-16">
           <SetCookieClient token={token} />
           {orders.map((order) => {
             const now = new Date();
@@ -81,14 +90,14 @@ export default async function AuthPage({ searchParams }) {
             return (
               <div
                 key={order._id}
-                className="bg-white p-4 rounded-xl shadow border border-gray-200"
+                className="bg-white p-6 rounded-3xl shadow-xl border border-amber-100 transition-shadow hover:shadow-2xl"
               >
                 <div className="flex justify-between items-center mb-2">
                   <span
-                    className={`px-2 py-1 text-xs rounded font-medium ${
+                    className={`px-3 py-1 text-xs rounded-full font-bold ${
                       isPast
-                        ? "bg-gray-200 text-gray-700"
-                        : "bg-blue-100 text-blue-800"
+                        ? "bg-amber-50 text-amber-800"
+                        : "bg-gradient-to-r from-amber-600 to-amber-500 text-white"
                     }`}
                   >
                     {label}
@@ -109,7 +118,7 @@ export default async function AuthPage({ searchParams }) {
                 <div className="mt-4">
                   <a
                     href={`/my-orders/auth/order-info/${order._id}`}
-                    className="inline-block text-sm text-blue-600 hover:underline"
+                    className="inline-flex items-center justify-center w-full sm:w-auto px-5 py-2 rounded-full bg-gradient-to-r from-amber-700 to-orange-500 hover:from-amber-800 hover:to-orange-600 text-white font-bold shadow-lg transition text-sm"
                   >
                     Edit Reservation
                   </a>

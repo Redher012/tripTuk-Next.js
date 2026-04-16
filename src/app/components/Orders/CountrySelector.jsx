@@ -68,11 +68,11 @@ const CountrySelector = ({
     <div className="relative w-full" ref={dropDownRef}>
       {field === "Country" && (
         <div>
-          <label className="block font-medium mb-1">{field} *</label>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">{field} *</label>
 
           {/* Selected Field */}
           <div
-            className="p-2.5 border rounded cursor-pointer bg-white"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl cursor-pointer bg-white focus-within:border-amber-500 focus-within:ring-4 focus-within:ring-amber-100 transition-all"
             onClick={() => setOpen(!open)}
           >
             {selectedCountry || "Select a country..."}
@@ -82,12 +82,12 @@ const CountrySelector = ({
 
       {field === "Phone" && (
         <div>
-          <label className="block font-medium">Phone with country code *</label>
-          <div className="w-full border rounded">
-            <div className="flex items-stretch h-[42px]">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Phone with country code *</label>
+          <div className="w-full border-2 border-gray-200 rounded-xl focus-within:border-amber-500 focus-within:ring-4 focus-within:ring-amber-100 transition-all bg-white">
+            <div className="flex items-stretch h-[50px]">
               {selectedCountryData?.flags?.png && (
                 <div
-                  className="border-r h-full px-1.5 flex items-center gap-1 cursor-pointer self-stretch"
+                  className="border-r border-gray-200 h-full px-2.5 flex items-center gap-1 cursor-pointer self-stretch"
                   onClick={() => setOpen(!open)}
                 >
                   <Image
@@ -101,9 +101,11 @@ const CountrySelector = ({
                 </div>
               )}
               <div className="flex items-center w-full">
-                <p className="pl-2">{countryPhoneCode}</p>
+                <p className="pl-3 text-gray-700">{countryPhoneCode}</p>
                 <input
-                  className="py-2 px-1 w-full outline-0"
+                  name="tel"
+                  autoComplete="tel-national"
+                  className="py-3 px-2 w-full outline-0 rounded-r-xl"
                   type="tel"
                   value={tempPhone}
                   onChange={(e) => setTempPhone(e.target.value)}
@@ -117,7 +119,7 @@ const CountrySelector = ({
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute z-10 w-full bg-white border rounded max-h-60 shadow overflow-hidden">
+        <div className="absolute z-10 w-full bg-white border border-amber-100 rounded-xl max-h-60 shadow-lg overflow-hidden">
           {/* Search Input */}
           <div className="relative">
             <input
@@ -125,7 +127,7 @@ const CountrySelector = ({
               placeholder="Search..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full p-2 border-b absolute top-0 left-0 bg-neutral-050"
+              className="w-full p-3 border-b border-amber-100 absolute top-0 left-0 bg-amber-50 outline-none"
             />
             <div className="overflow-y-auto max-h-60 pt-11">
               {/* Country List */}
@@ -138,7 +140,7 @@ const CountrySelector = ({
                       setQuery("");
                       setOpen(false);
                     }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer flex items-center gap-3"
+                    className="p-3 hover:bg-amber-50 cursor-pointer flex items-center gap-3"
                   >
                     <Image
                       alt={`Flag country ${country.name.common}`}

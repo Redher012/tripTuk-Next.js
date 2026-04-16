@@ -46,10 +46,10 @@ export default function RootLayout({ children }) {
           src="https://analytics.staydetails.com/script.js"
           data-website-id="97340bdc-fb4f-4e06-8910-3c27c47981c8"
         ></script>
-        <div className="overflow-hidden min-h-screen">
+        <div className="overflow-x-hidden min-h-screen flex flex-col">
           <PayPalProviderWrapper>
             <Navigation />
-            {children}
+            <main className="flex-1">{children}</main>
             <Footer />
           </PayPalProviderWrapper>
           <ToastContainer />

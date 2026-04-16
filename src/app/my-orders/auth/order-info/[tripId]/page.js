@@ -25,14 +25,14 @@ export default async function Page({ params }) {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-primary-50 pt-24 px-3 flex items-center justify-center">
-        <div className="bg-red-400 p-8 rounded-2xl flex flex-col gap-3">
-          <p className=" text-neutral-050 text-xl">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40 pt-24 px-4 md:px-6 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-3xl shadow-xl border border-red-200 flex flex-col gap-3 w-full max-w-xl">
+          <p className="text-gray-900 text-xl font-semibold">
             Something went wrong while getting the data
           </p>
           <Link
             href="/my-orders"
-            className="bg-neutral-050 p-3 rounded-xl text-center flex items-center justify-center gap-2 text-lg hover:bg-primary-100 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-700 to-orange-500 hover:from-amber-800 hover:to-orange-600 text-white font-bold shadow-lg transition cursor-pointer text-lg"
           >
             <FaArrowLeft className="mb-[2px]" />
             Back to my reservations
@@ -41,17 +41,19 @@ export default async function Page({ params }) {
       </div>
     );
   } else {
+    const isPastReservation = new Date(order.endDate) < new Date();
+
     return (
-      <div className="min-h-screen bg-green-50 pt-24 px-4">
-        <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md flex flex-col md:flex-row overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/40 pt-24 px-4 md:px-6">
+        <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl border border-amber-100 overflow-hidden flex flex-col md:flex-row">
           {/* Left Section */}
-          <div className="bg-green-900 text-white w-full md:w-1/2 p-8 flex flex-col justify-between">
+          <div className="bg-gradient-to-br from-amber-700 to-orange-500 text-white w-full md:w-1/2 p-8 flex flex-col justify-between">
             <div>
               <h1 className="text-3xl font-semibold leading-snug mb-6">
-                Order <span className="text-green-300">Details</span>
+                Order <span className="text-amber-100">Details</span>
               </h1>
 
-              <ul className="space-y-3 text-green-100 text-sm">
+              <ul className="space-y-3 text-white/90 text-sm">
                 <li>
                   <strong>Name:</strong> {order.names}
                 </li>
@@ -78,13 +80,18 @@ export default async function Page({ params }) {
               </ul>
             </div>
 
-            {!order.paid && (
-              <div className="bg-neutral-050 p-3 mt-3 rounded-lg">
+            {!order.paid && !isPastReservation && (
+              <div className="bg-white/10 p-4 mt-6 rounded-2xl border border-white/15">
                 <PaymentSelector
                   tripPrice={order.priceTotalTrip}
                   email={order.email}
                   orderId={order._id}
                 />
+              </div>
+            )}
+            {!order.paid && isPastReservation && (
+              <div className="bg-amber-100 text-amber-900 p-4 mt-6 rounded-2xl text-sm font-semibold">
+                This reservation is in the past and can no longer be paid.
               </div>
             )}
             {order.paid && (
@@ -100,8 +107,10 @@ export default async function Page({ params }) {
           {/* Right Section */}
           <div className="w-full md:w-1/2 p-8 space-y-6 text-sm text-gray-800">
             <div>
-              <h2 className="text-xl font-medium mb-1">Trip Details</h2>
-              <ul className="space-y-1">
+              <h2 className="text-xl font-bold mb-2">
+                Trip Details
+              </h2>
+              <ul className="space-y-1 text-gray-700">
                 <li>
                   <strong>Start:</strong>{" "}
                   {new Date(order.startDate).toLocaleDateString()}
@@ -126,8 +135,8 @@ export default async function Page({ params }) {
             </div>
 
             <div>
-              <h2 className="text-lg font-medium mb-1">Pricing</h2>
-              <ul className="space-y-1">
+              <h2 className="text-lg font-bold mb-2">Pricing</h2>
+              <ul className="space-y-1 text-gray-700">
                 <li>
                   <strong>Price per Day:</strong> €{order.priceVehicleDay}
                 </li>
@@ -138,7 +147,7 @@ export default async function Page({ params }) {
             </div>
 
             <div>
-              <h2 className="text-lg font-medium mb-1">Metadata</h2>
+              <h2 className="text-lg font-bold mb-2">Metadata</h2>
               <ul className="space-y-1 text-gray-500">
                 <li>
                   <strong>Created:</strong>{" "}

@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowBack } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const Accordion = () => {
   const textExpanders = [
@@ -13,6 +13,8 @@ const Accordion = () => {
     Our 1-day Tuk Tuk experience with a personal driver lets you dive into the culture, explore hidden gems, and taste authentic street food — all with zero stress. 
     Start your story today, and see what a single day of adventure can awaken in you.`,
       id: 1,
+      shortTitle: "1 Day",
+      highlight: "Quick Start",
     },
     {
       title: "2-3 Days – Escape the Ordinary",
@@ -20,6 +22,8 @@ const Accordion = () => {
     With 2–3 days, we go deeper. Your personal driver isn't just behind the wheel — he’s your cultural translator, your local insider, and your safety net. 
     Don’t just visit Sri Lanka. Live it, feel it, and return home with stories that don’t exist on Instagram.`,
       id: 2,
+      shortTitle: "2-3 Days",
+      highlight: "Popular Choice",
     },
     {
       title: "4-7 Days – Explore Like a Local",
@@ -27,6 +31,8 @@ const Accordion = () => {
     Imagine waking up to the sound of waves in the south, grabbing tea in the hill country by noon, and dining roadside under palm trees by night.
     This isn’t a trip. It’s a personal transformation — fueled by freedom, guided by someone who knows the land inside and out.`,
       id: 3,
+      shortTitle: "4-7 Days",
+      highlight: "Best Value",
     },
     {
       title: "8-14 Days – Full Island Immersion",
@@ -34,6 +40,8 @@ const Accordion = () => {
     Your driver becomes more than a guide — he’s a travel partner who opens doors you didn’t even know were there.
     We take care of everything — routes, comfort stops, safety — so you can lose yourself in the magic of Sri Lanka without getting lost.`,
       id: 4,
+      shortTitle: "8-14 Days",
+      highlight: "Most Complete",
     },
     {
       title: "15-20 Days – The Ultimate Sri Lankan Experience",
@@ -41,49 +49,88 @@ const Accordion = () => {
     From wildlife safaris to ancient temples, from jungle trails to coastal sunsets, this is where your travel dreams and local life merge.
     You’ll leave not just relaxed, but renewed — with a head full of stories, and a heart full of connection.`,
       id: 5,
+      shortTitle: "15-20 Days",
+      highlight: "Ultimate Journey",
     },
   ];
 
-  const [selectedExpander, setSelectedExpander] = useState(1);
+  const [selectedExpander, setSelectedExpander] = useState(3);
 
   return (
-    <div
-      className="md:w-1/2 flex flex-col gap-5 justify-center md:rounded-r-4xl  md:rounded-bl-none rounded-b-4xl p-5"
-      style={{ boxShadow: "0px 0px 20px -4px #b1b1b1" }}
-    >
+    <div className="flex flex-col gap-4">
       {textExpanders.map((expand) => (
-        <div
+        <motion.div
           key={expand.id}
-          className="border-b py-3 cursor-pointer"
+          initial={false}
+          className={`rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 ${
+            selectedExpander === expand.id
+              ? "bg-white shadow-2xl ring-2 ring-amber-500"
+              : "bg-white shadow-lg hover:shadow-xl"
+          }`}
           onClick={() => setSelectedExpander(expand.id)}
         >
-          <div className="flex justify-between items-center text-xl font-semibold text-primary-800">
-            {expand.title}
-            <div>
-              {selectedExpander === expand.id ? (
-                <IoIosArrowBack />
-              ) : (
-                <IoIosArrowDown />
-              )}
-            </div>
-          </div>
-          {/* AnimatePresence */}
-          <AnimatePresence initial>
-            {selectedExpander === expand.id && (
-              <motion.div
-                key="constnt"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="overflow-hidden"
+          <div className="p-6">
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                      selectedExpander === expand.id
+                        ? "bg-gradient-to-r from-amber-600 to-amber-500 text-white"
+                        : "bg-amber-100 text-amber-700"
+                    }`}
+                  >
+                    {expand.highlight}
+                  </span>
+                  <h3 className="text-lg md:text-xl font-bold text-gray-900">{expand.shortTitle}</h3>
+                </div>
+                <p className="text-gray-600 font-medium">{expand.title.split("–")[1]}</p>
+              </div>
+              <div
+                className={`flex-shrink-0 transition-transform duration-300 ${
+                  selectedExpander === expand.id ? "rotate-180" : ""
+                }`}
               >
-                <div className="h-[1px] w-full bg-primary-900 my-2" />
-                <div>{expand.content}</div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                <div
+                  className={`p-2 rounded-full ${
+                    selectedExpander === expand.id
+                      ? "bg-gradient-to-r from-amber-600 to-amber-500"
+                      : "bg-amber-100"
+                  }`}
+                >
+                  <IoIosArrowDown
+                    className={`w-5 h-5 ${
+                      selectedExpander === expand.id ? "text-white" : "text-amber-700"
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <AnimatePresence initial={false}>
+              {selectedExpander === expand.id && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="h-1 w-full bg-gradient-to-r from-amber-600 to-amber-500 my-4 rounded-full" />
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    {expand.content}
+                  </p>
+                  <Link
+                    href="/service"
+                    className="mt-6 block w-full bg-gradient-to-r from-amber-600 to-amber-500 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transition-shadow text-center"
+                  >
+                    Select {expand.shortTitle} Package
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
       ))}
     </div>
   );

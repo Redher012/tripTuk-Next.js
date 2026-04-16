@@ -1,41 +1,91 @@
-import Mailgun from "mailgun.js";
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+
+const DEFAULT_ZOHO_HOST = "smtppro.zoho.eu";
+const DEFAULT_ZOHO_PORT = 465;
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 export async function POST(req) {
-  const body = await req.json();
-  const { triptuk, name, message, email, reason, subject, html } = body;
-
-  const mailgun = new Mailgun(FormData);
-  const mg = mailgun.client({
-    username: "api",
-    key: process.env.MAILGUN_API || "API_KEY",
-    url: "https://api.eu.mailgun.net",
-  });
-
   try {
-    const mailOptions = {
-      from: "Triptuk App <postmaster@mg.triptuk.com>",
-      to: [`Kristiyan Halachev <${triptuk ? "office@triptuk.com" : email}>`],
-      subject: subject || "New Email",
-    };
+    const body = await req.json();
+    const { triptuk, name, message, email, reason, subject, html } = body || {};
 
-    if (html) {
-      mailOptions.html = html;
-    } else {
-      mailOptions.text = `name: ${name || "Person Name"}
-         subject: ${reason || "Reason"}
-         email: ${email || "Persons Email"}
-         message: ${message || "Message from user"}
-        `;
+    const user =
+      process.env.ZOHO_USER?.trim() ||
+      process.env.ZOHO_EMAIL?.trim() ||
+      process.env.ZOHO_USERNAME?.trim();
+    const pass =
+      (process.env.ZOZO_PASS ||
+        process.env.ZOHO_PASS ||
+        process.env.ZOHO_PASSWORD ||
+        process.env.ZOHO_SMTP_PASS)?.trim();
+
+    if (!user || !pass) {
+      console.error("sendEmail: missing ZOHO_USER/ZOZO_PASS (or ZOHO_PASS)");
+      return NextResponse.json(
+        { success: false, error: "Email service is not configured." },
+        { status: 500 }
+      );
     }
 
-    const data = await mg.messages.create("mg.triptuk.com", mailOptions);
+    const host = process.env.ZOHO_SMTP_HOST?.trim() || DEFAULT_ZOHO_HOST;
+    const port = Number(process.env.ZOHO_SMTP_PORT || DEFAULT_ZOHO_PORT);
+    const secure =
+      process.env.ZOHO_SMTP_SECURE === "false" ? false : port === 465;
 
-    console.log(`Email about ${reason} to ${email} was sent.`);
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure,
+      auth: { user, pass },
+    });
 
-    return NextResponse.json({ success: true, id: data.id });
+    const to = triptuk ? "kristianhalachev0@gmail.com" : email;
+    if (!to) {
+      return NextResponse.json(
+        { success: false, error: "Missing recipient email." },
+        { status: 400 }
+      );
+    }
+
+    const finalSubject = subject || reason || "TripTuk message";
+
+    const textFallback = `name: ${name || "Person Name"}
+subject: ${reason || finalSubject}
+email: ${email || "Persons Email"}
+message: ${message || "Message from user"}`;
+
+    const finalHtml =
+      html ||
+      `
+        <p><strong>Name:</strong> ${escapeHtml(name || "")}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email || "")}</p>
+        <p><strong>Reason:</strong> ${escapeHtml(reason || "")}</p>
+        <p><strong>Message:</strong></p>
+        <pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(
+          message || ""
+        )}</pre>
+      `;
+
+    const info = await transporter.sendMail({
+      from: `"TripTuk" <${user}>`,
+      to,
+      replyTo: email || undefined,
+      subject: finalSubject,
+      text: textFallback,
+      html: finalHtml,
+    });
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.log(error);
+    console.error("sendEmail: error", error);
     return NextResponse.json({ success: false }, { status: 500 });
   }
 }

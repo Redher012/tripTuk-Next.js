@@ -18,16 +18,18 @@ const PaymentSelector = ({ tripPrice, getOrderDetails, orderId, email }) => {
 
   const createOrderAndGetDetails = async () => {
     const result = await getOrderDetails?.();
-    if (!result) return;
+    if (!result) return false;
     const { orderId, email } = result;
 
     idRef.current = orderId;
     emailRef.current = email;
+    return true;
   };
 
   const handleCreateOrder = async () => {
     if (getOrderDetails) {
-      await createOrderAndGetDetails();
+      const created = await createOrderAndGetDetails();
+      if (!created) return;
     }
 
     if (!idRef.current || !emailRef.current) {
@@ -94,18 +96,18 @@ const PaymentSelector = ({ tripPrice, getOrderDetails, orderId, email }) => {
       <div className="pt-6 ">
         <button
           onClick={handleCreateOrder}
-          className="w-full bg-purple-300 py-3 text-xl cursor-pointer rounded font-semibold text-neutral-050 hover:bg-purple-700"
+          className="w-full bg-gradient-to-r from-amber-700 to-orange-500 hover:from-amber-800 hover:to-orange-600 py-4 text-lg cursor-pointer rounded-full font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.01]"
         >
           Pay My Ride
         </button>
       </div>
       {payPalOpen && (
-        <div className="fixed bg-neutral-400/70 w-screen h-full left-0 top-0 flex items-center justify-center px-3">
+        <div className="fixed bg-black/40 backdrop-blur-sm w-screen h-full left-0 top-0 flex items-center justify-center px-3">
           <div
             id="paypal-button-container"
-            className="bg-neutral-050 w-xl p-6 rounded-4xl"
+            className="bg-white w-xl p-6 rounded-3xl border border-amber-100 shadow-2xl"
           >
-            <h2 className="text-3xl text-neutral-900 font-bold mb-4 py-2">
+            <h2 className="text-3xl text-gray-900 font-bold mb-4 py-2">
               Pay with PayPal
             </h2>
             <PayPalButtons

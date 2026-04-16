@@ -4,6 +4,7 @@ export async function sendEmailClient({
   email,
   message,
   reason,
+  subject,
   html,
 }) {
   try {
@@ -16,12 +17,20 @@ export async function sendEmailClient({
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ triptuk, name, email, message, reason, html }),
+        body: JSON.stringify({
+          triptuk,
+          name,
+          email,
+          message,
+          reason,
+          subject,
+          html,
+        }),
       }
     );
 
     const data = await res.json();
-    return { success: true, data };
+    return { success: !!res.ok && data?.success === true, data };
   } catch (err) {
     console.error("Error sending message:", err);
     return { success: false, error: err };

@@ -18,6 +18,7 @@ export async function POST(req) {
   const result = await sendEmailClient({
     email: email,
     subject: "Login to Triptuk",
+    reason: "Login to TripTuk",
     html: verificationEmailTemplate(email, loginLink),
   });
 
@@ -27,6 +28,9 @@ export async function POST(req) {
       { status: 200 }
     );
   } else {
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: result?.data?.error || "Email send failed" },
+      { status: 500 }
+    );
   }
 }
