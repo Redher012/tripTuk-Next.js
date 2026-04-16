@@ -23,8 +23,12 @@ const FirstSectionIllustration = () => {
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
-      <div className="absolute top-24 md:top-32 right-4 md:right-12 bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-bold shadow-2xl">
-        From EUR 70/day
+      <div className="absolute top-24 md:top-32 w-full px-4 md:px-6 z-10">
+        <div className="max-w-7xl mx-auto flex justify-end">
+          <div className="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-bold shadow-2xl">
+            From EUR 70/day
+          </div>
+        </div>
       </div>
       <div className="relative w-full px-4 md:px-6 max-w-7xl mx-auto z-10 pt-20">
         <div className="flex flex-col gap-8 md:w-8/12 lg:w-7/12">

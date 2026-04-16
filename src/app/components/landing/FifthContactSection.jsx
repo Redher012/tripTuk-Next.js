@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-import { FaHeart, FaCheck, FaWhatsapp } from "react-icons/fa";
+import { FaCheck, FaUsers, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 
 const FifthContactSection = () => {
@@ -15,7 +15,6 @@ const FifthContactSection = () => {
       <div className="relative px-4 md:px-6 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 bg-yellow-400 text-gray-900 px-6 py-2 rounded-full font-bold mb-4">
-            <FaHeart className="w-5 h-5" />
             Meet the Team
           </span>
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -104,7 +103,7 @@ const FifthContactSection = () => {
                 <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
                   <div className="flex items-center gap-4 mb-3">
                     <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center">
-                      <FaHeart className="w-6 h-6 text-white" />
+                      <FaUsers className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <p className="font-bold text-gray-900 text-lg">Kris & Sami</p>

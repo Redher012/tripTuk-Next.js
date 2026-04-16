@@ -36,9 +36,9 @@ const FourthSectionExpanders = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               </div>
-              <div className="relative h-48 rounded-3xl overflow-hidden shadow-xl hidden lg:block">
+              <div className="relative h-[14.5rem] rounded-3xl overflow-hidden shadow-xl hidden lg:block">
                 <Image
-                  src="/tukTukFrontPageEdited.png"
+                  src="/popedJpgOfTouristOnAripInSriLanka.jpeg"
                   alt="Tuk tuk front view"
                   fill
                   className="w-full h-full object-cover"
